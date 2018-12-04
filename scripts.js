@@ -1,6 +1,6 @@
 const TodoEditor = {
     template: `
-        <div class="container">
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
             <h1>Add a Todo</h1>
             <div class="row my-5">
                 <div class="col">
@@ -39,10 +39,10 @@ const TodoEditor = {
 const TodoList = {
     template: `
         
-        <div class="container">
-            <div class="row my-5">
-                <div class="col">
-                    <h1 class="mt-5">Your To-Do's</h1>
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Your To-Do's</h1>
                     <button class="btn btn-primary mt-3" @click="obtain()">Obtain the todo's</button>
                 </div>
                 
@@ -75,7 +75,7 @@ new Vue({
         'todo-list': TodoList
     },
     template: `
-        <div>
+        <div class="container">
             <todo-editor></todo-editor>
             <todo-list></todo-list>
         </div>
