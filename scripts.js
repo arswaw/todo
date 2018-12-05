@@ -4,7 +4,7 @@ const TodoEditor = {
             <h1>Add a Todo</h1>
             <div class="row">
                 <div class="col-9">
-                    <input v-model="todoText" class="form-control form-control-lg" type="text" placeholder="What do you want to do?">
+                    <input v-model="todoText" class="form-control form-control-lg" type="text" placeholder="What do you want to do?" @keyup.enter="addTodo()">
                 </div>
                     
                 <div class="col-3">
@@ -32,6 +32,9 @@ const TodoEditor = {
                 }
                 
                 const date = new Date();
+                
+                this.todos = JSON.parse(localStorage.getItem('todos'));
+                
                 // The newest todos go to the front of the list
                 this.todos.push({
                     name: this.todoText,
@@ -51,10 +54,10 @@ const TodoEditor = {
     },
 
     mounted: function() {
-        const local = JSON.parse(localStorage.getItem("todos"))
+        const local = JSON.parse(localStorage.getItem("todos"));
         
         if (local !== null) {
-            this.todos = local
+            this.todos = local;
         }
     },
 
@@ -84,13 +87,14 @@ const TodoList = {
                             <input v-model="newName" class="form-control form-control-lg" type="text" placeholder="Enter new todo name">
                         </div>
                         
-                    <div class="col-6">
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-primary btn-lg mr-3 rounded" @click='updateTodo()'>Update</button>
-                        <button class="btn btn-secondary btn-lg rounded" @click='showEditor=false'>Cancel</button>
+                        <div class="col-6">
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-primary btn-lg mr-3 rounded" @click='updateTodo()'>Update</button>
+                                <button class="btn btn-secondary btn-lg rounded" @click='showEditor=false'>Cancel</button>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
+                    
                     <ul class="mt-5 list-group">
                         <li v-for="(todo, index) in display" class="list-group-item d-flex justify-content-between align-items-center" v-bind:class="{'list-group-item-success': todo.state === 'finished' ? true : false, 'list-group-item-danger': todo.state === 'pending' ? true : false}">{{ todo.name }}
                             <div class="btn-group" role="group" aria-label="Edit delete group">
@@ -110,21 +114,22 @@ const TodoList = {
     methods: {
         deleteTodo(ind, item) {
             
-            this.showEditor = false
+            this.showEditor = false;
 
             // TODO refactor to just use this.display
-            const todos = JSON.parse(localStorage.getItem("todos"))
+            const todos = JSON.parse(localStorage.getItem("todos"));
+            
+            todos.splice(ind, 1);
 
-            const modified = todos.filter(todo => {
-                return todo.id !== item.id
-            })
+            // const modified = todos.filter(todo => {
+            //     return todo.id !== item.id;
+            // });
 
+            this.display = todos;
 
-            this.display = modified
+            localStorage.setItem("todos", JSON.stringify(todos));
 
-            localStorage.setItem("todos", JSON.stringify(modified))
-
-            console.info("Index to delete", ind, item, modified, this.display)
+            console.info("Index to delete", ind, item, this.display);
 
         },
 
@@ -155,6 +160,7 @@ const TodoList = {
         
         changeState(index) {
             this.display[index].state = this.display[index].state === 'pending' ? 'finished' : 'pending';
+            localStorage.setItem('todos', JSON.stringify(this.display));
         }
     },
 
@@ -175,7 +181,7 @@ const TodoList = {
         const vm = this
         
         bus.$on('add-button-click', function (msg) {
-        vm.refreshList();
+            vm.refreshList();
         })
     }
 }
