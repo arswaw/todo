@@ -1,4 +1,4 @@
-const bus = new Vue();
+import { bus } from '../scripts.js'
 
 const TodoEditor = {
     template: '#todo-editor-template',

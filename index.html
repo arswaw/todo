@@ -56,13 +56,13 @@
                             <div class="btn-group" role="group" aria-label="Edit delete group">
                                 <span class="mr-3">{{todo.created}} </span>
                                 
-                                <select class="d-md-none d-lg-block" @change="action(actionValue, index, todo)" v-model="actionValue">
+                                <select class="d-block d-md-none" @change="action(actionValue, index, todo)" v-model="actionValue">
                                     <option value="done">Done</option>
                                     <option value="edit">Edit</option>
                                     <option value="delete">Delete</option>
                                 </select>
                                 
-                                <div class="d-none d-sm-block">
+                                <div class="d-none d-md-block">
                                     <button class="btn btn-success mr-2 rounded" @click="changeState(index)">Done</button>
                                     
                                     <button type="button" @click="showTodoEditor(todo, index)" class="btn btn-primary mr-2 rounded">Edit</button>
