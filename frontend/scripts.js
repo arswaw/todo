@@ -36,11 +36,41 @@ new Vue({
         </button>
       </div>
       <div class="modal-body">
-        ...
+        <div>
+          <div class="text-center">
+            <h1>Create an account</h1>
+            <p>Let's get started! When you create an account, you can access your todos from anywhere</p>
+          </div>
+
+          <hr>
+
+          <div>
+            <div class="form-group">
+              <label for="fullName" class="bold">Full name</label>
+              <input type="text" id="fullName" class="form-control" placeholder="Sturgis P. Sturgeon">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" id="email" class="form-control" placeholder="sturgeon@example.com">
+            </div>
+
+            <div class="form-group">
+              <label for="password">Choose a password</label>
+              <input type="password" id="password" class="form-control" placeholder="********">
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm password</label>
+              <input type="password" id="confirmPassword" class="form-control" placeholder="********">
+            </div>
+          </div>
+        </div>
+        <p class="text-center">Have an account? <a href="#"><u>Sign in</u></a></p>
       </div>
       <div class="modal-footer">
         <button type="button" @click="showSignup=false" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-success">Create account</button>
       </div>
     </div>
   </div>
