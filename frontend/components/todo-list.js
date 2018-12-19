@@ -45,14 +45,18 @@ const TodoList = {
 
       this.currentTodo = item;
       this.showEditor = true;
+      this.newName = this.currentTodo.name;
     },
 
     updateTodo () {
       console.info("Update", this.currentTodo, this.newName);
       this.currentTodo.name = this.newName;
       this.display[this.editIndex] = this.currentTodo;
+
       localStorage.setItem("todos", JSON.stringify(this.display));
       this.newName = "";
+
+      this.showEditor = false;
     },
 
     refreshList () {

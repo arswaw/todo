@@ -39,12 +39,10 @@
                       <h1>Your To-Do's</h1>
                   </div>
 
-
-
                   <div class="col">
                       <div class="row" v-if="showEditor">
                           <div class="col-6">
-                              <input v-model="newName" class="form-control form-control-lg" type="text" placeholder="Enter new todo name">
+                              <input v-model="newName" @keyup.enter='updateTodo()' class="form-control form-control-lg" type="text" placeholder="Enter new todo name">
                           </div>
 
                           <div class="col-6">
@@ -67,8 +65,8 @@
                                   </select>
 
                                   <div class="d-none d-md-block">
-                                      <button class="btn btn-success mr-2 rounded" @click="changeState(index)">Done</button>
-
+                                      <button v-if="todo.state == 'pending'" class="btn btn-success mr-2 rounded" @click="changeState(index)">Done</button>
+                                      <button v-if="todo.state == 'finished'" class="btn btn-danger mr-2 rounded" @click="changeState(index)">Undone</button>
                                       <button type="button" @click="showTodoEditor(todo, index)" class="btn btn-primary mr-2 rounded">Edit</button>
                                       <button type="button" @click="deleteTodo(index, todo)" class="btn btn-danger rounded">Delete</button>
                                   </div>
