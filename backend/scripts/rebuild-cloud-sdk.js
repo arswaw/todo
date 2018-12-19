@@ -1,14 +1,11 @@
 module.exports = {
+  friendlyName: "Rebuild Cloud SDK",
 
-  friendlyName: 'Rebuild Cloud SDK',
+  description:
+    "Regenerate the configuration for the \"Cloud SDK\" -- the JavaScript module used for AJAX and WebSockets.",
 
-
-  description: 'Regenerate the configuration for the "Cloud SDK" -- the JavaScript module used for AJAX and WebSockets.',
-
-
-  fn: async function(){
-
-    var path = require('path');
+  fn: async function () {
+    var path = require("path");
 
     var endpointsByMethodName = {};
     var extraEndpointsOnlyForTestsByMethodName = {};
@@ -20,7 +17,7 @@ module.exports = {
       // the very last sub-target in the array.
       if (_.isArray(target)) {
         target = _.last(target);
-      }//ﬁ
+      } // ﬁ
 
       // Skip redirects
       // (Note that, by doing this, we also skip traditional shorthand
@@ -44,17 +41,17 @@ module.exports = {
 
       // Skip routes that just serve views.
       // (but still generate them for use in tests, for convenience)
-      if (target.view || (bareActionName.match(/^view-/))) {
+      if (target.view || bareActionName.match(/^view-/)) {
         extraEndpointsOnlyForTestsByMethodName[methodName] = {
-          verb: (expandedAddress.method||'get').toUpperCase(),
+          verb: (expandedAddress.method || "get").toUpperCase(),
           url: expandedAddress.url
         };
         continue;
-      }//•
+      } // •
 
       endpointsByMethodName[methodName] = {
-        verb: (expandedAddress.method||'get').toUpperCase(),
-        url: expandedAddress.url,
+        verb: (expandedAddress.method || "get").toUpperCase(),
+        url: expandedAddress.url
       };
 
       // If this is an actions2 action, then determine appropriate serial usage.
@@ -63,7 +60,7 @@ module.exports = {
       // > method for this one.
       var requestable = sails.getActions()[target.action];
       if (!requestable) {
-        sails.log.warn('Skipping unrecognized action: `'+target.action+'`');
+        sails.log.warn("Skipping unrecognized action: `" + target.action + "`");
         continue;
       }
       var def = requestable.toJSON && requestable.toJSON();
@@ -71,28 +68,36 @@ module.exports = {
         if (def.args !== undefined) {
           endpointsByMethodName[methodName].args = def.args;
         } else {
-          endpointsByMethodName[methodName].args = _.reduce(def.inputs, (args, inputDef, inputCodeName)=>{
-            args.push(inputCodeName);
-            return args;
-          }, []);
+          endpointsByMethodName[methodName].args = _.reduce(
+            def.inputs,
+            (args, inputDef, inputCodeName) => {
+              args.push(inputCodeName);
+              return args;
+            },
+            []
+          );
         }
       }
 
       // And we determine whether it needs to communicate over WebSockets
       // by checking for an additional property in the route target.
       if (target.isSocket) {
-        endpointsByMethodName[methodName].protocol = 'io.socket';
+        endpointsByMethodName[methodName].protocol = "io.socket";
       }
-    }//∞
+    } // ∞
 
     // Smash and rewrite the `cloud.setup.js` file in the assets folder to
     // reflect the latest set of available cloud actions exposed by this Sails
     // app (as determined by its routes above)
     await sails.helpers.fs.write.with({
-      destination: path.resolve(sails.config.appPath, 'assets/js/cloud.setup.js'),
+      destination: path.resolve(
+        sails.config.appPath,
+        "assets/js/cloud.setup.js"
+      ),
       force: true,
-      string: ``+
-`/**
+      string:
+        "" +
+        `/**
  * cloud.setup.js
  *
  * Configuration for this Sails app's generated browser SDK ("Cloud").
@@ -110,25 +115,33 @@ Cloud.setup({
   methods: ${JSON.stringify(endpointsByMethodName)}
   /* eslint-enable */
 
-});`+
-      `\n`
+});` +
+        "\n"
     });
 
     // Also, if a `test/` folder exists, set up a barebones bounce of this data
     // as a JSON file inside of it, for testing purposes:
-    var hasTestFolder = await sails.helpers.fs.exists(path.resolve(sails.config.appPath, 'test/'));
+    var hasTestFolder = await sails.helpers.fs.exists(
+      path.resolve(sails.config.appPath, "test/")
+    );
     if (hasTestFolder) {
       await sails.helpers.fs.write.with({
-        destination: path.resolve(sails.config.appPath, 'test/private/CLOUD_SDK_METHODS.json'),
-        string: JSON.stringify(_.extend(endpointsByMethodName, extraEndpointsOnlyForTestsByMethodName)),
+        destination: path.resolve(
+          sails.config.appPath,
+          "test/private/CLOUD_SDK_METHODS.json"
+        ),
+        string: JSON.stringify(
+          _.extend(
+            endpointsByMethodName,
+            extraEndpointsOnlyForTestsByMethodName
+          )
+        ),
         force: true
       });
     }
 
-    sails.log.info('--');
-    sails.log.info('Successfully rebuilt Cloud SDK for use in the browser.');
-    sails.log.info('(and CLOUD_SDK_METHODS.json for use in automated tests)');
-
+    sails.log.info("--");
+    sails.log.info("Successfully rebuilt Cloud SDK for use in the browser.");
+    sails.log.info("(and CLOUD_SDK_METHODS.json for use in automated tests)");
   }
-
 };

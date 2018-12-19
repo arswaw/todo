@@ -9,7 +9,6 @@
  *   https://sailsjs.com/docs/concepts/policies/access-control-and-permissions
  */
 module.exports = async function (req, res, proceed) {
-
   // If `req.me` is set, then we know that this request originated
   // from a logged-in user.  So we can safely proceed to the next policy--
   // or, if this is the last policy, the relevant action.
@@ -19,8 +18,7 @@ module.exports = async function (req, res, proceed) {
     return proceed();
   }
 
-  //--•
+  // --•
   // Otherwise, this request did not come from a logged-in user.
   return res.unauthorized();
-
 };

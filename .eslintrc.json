@@ -1,0 +1,18 @@
+{
+  "extends": "standard",
+  "globals": {
+    "localStorage": true,
+    "alert": true,
+    "sails": true,
+    "node": true,
+    "User": true,
+    "_": true,
+    "Vue": true
+  },
+  "rules": {
+    "quotes": [2, "double"],
+    "semi": [2, "always"],
+    "no-inner-declarations": 0,
+    "no-throw-literal": 0
+  }
+}

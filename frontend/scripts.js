@@ -1,22 +1,29 @@
-import { TodoEditor } from './components/todo-editor.js'
-import { TodoList } from './components/todo-list.js'
+/* eslint-disable no-unused-vars */
+import { TodoEditor } from "./components/todo-editor.js";
+import { TodoList } from "./components/todo-list.js";
 
 const bus = new Vue();
 
-const signupFormTemplate = {"fullName":"","emailAddress":"","password":"","confirmPassword":""}
+const signupFormTemplate = {
+  fullName: "",
+  emailAddress: "",
+  password: "",
+  confirmPassword: ""
+};
 
+// eslint-disable-next-line no-new
 new Vue({
-    el: '#app',
-    components: {
-        'todo-editor': TodoEditor,
-        'todo-list': TodoList
-    },
-    data: function() {
-        return {
-            showSignup: false
-        }
-    },
-    template: `
+  el: "#app",
+  components: {
+    "todo-editor": TodoEditor,
+    "todo-list": TodoList
+  },
+  data: function () {
+    return {
+      showSignup: false
+    };
+  },
+  template: `
     <div>
     <!-- Modal -->
     <div class="modal" style="display: block;overflow: overlay;" v-if="showSignup" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -69,6 +76,6 @@ new Vue({
         </div>
     </div>
     `
-})
+});
 
-export { bus }
+export { bus };
